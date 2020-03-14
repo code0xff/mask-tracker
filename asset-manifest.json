@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/mask-tracker/static/css/main.fac71dec.chunk.css",
-    "main.js": "/mask-tracker/static/js/main.5d44afb3.chunk.js",
-    "main.js.map": "/mask-tracker/static/js/main.5d44afb3.chunk.js.map",
+    "main.js": "/mask-tracker/static/js/main.35089dc3.chunk.js",
+    "main.js.map": "/mask-tracker/static/js/main.35089dc3.chunk.js.map",
     "runtime-main.js": "/mask-tracker/static/js/runtime-main.53775d6a.js",
     "runtime-main.js.map": "/mask-tracker/static/js/runtime-main.53775d6a.js.map",
     "static/css/2.47e06e2e.chunk.css": "/mask-tracker/static/css/2.47e06e2e.chunk.css",
     "static/js/2.91ef4db2.chunk.js": "/mask-tracker/static/js/2.91ef4db2.chunk.js",
     "static/js/2.91ef4db2.chunk.js.map": "/mask-tracker/static/js/2.91ef4db2.chunk.js.map",
     "index.html": "/mask-tracker/index.html",
-    "precache-manifest.8922098a63724de4b131d9e823ab588e.js": "/mask-tracker/precache-manifest.8922098a63724de4b131d9e823ab588e.js",
+    "precache-manifest.f797ce535e9154cba922594be5dbe6b4.js": "/mask-tracker/precache-manifest.f797ce535e9154cba922594be5dbe6b4.js",
     "service-worker.js": "/mask-tracker/service-worker.js",
     "static/css/2.47e06e2e.chunk.css.map": "/mask-tracker/static/css/2.47e06e2e.chunk.css.map",
     "static/css/main.fac71dec.chunk.css.map": "/mask-tracker/static/css/main.fac71dec.chunk.css.map",
@@ -20,6 +20,6 @@
     "static/css/2.47e06e2e.chunk.css",
     "static/js/2.91ef4db2.chunk.js",
     "static/css/main.fac71dec.chunk.css",
-    "static/js/main.5d44afb3.chunk.js"
+    "static/js/main.35089dc3.chunk.js"
   ]
 }
