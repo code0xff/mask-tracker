@@ -12,7 +12,8 @@ export default function Store({store}) {
           <Card.Text>
             {store.addr}
           </Card.Text>
-          <Button variant={getStyleByLevel(store.remain_stat)} size="sm" name={getLinkInfo(store)} onClick={linkToMap}>지도에서 보기</Button>
+          <Button variant={getStyleByLevel(store.remain_stat)} size="sm" name={getLinkInfo(store)} onClick={linkToMap}>지도에서 보기</Button>&nbsp;
+          <Button variant={getStyleByLevel(store.remain_stat)} size="sm" name={store.name} onClick={linkToStoreInfo}>정보검색</Button>
         </Card.Body>
         <Card.Footer>
           <Badge pill variant={getStyleByLevel(store.remain_stat)}>{store.distance}km</Badge>
@@ -35,4 +36,8 @@ function getLinkInfo(store) {
 
 function linkToMap(e) {
   window.open(`https://map.kakao.com/link/map/${e.target.name}`)
+}
+
+function linkToStoreInfo(e) {
+  window.open(`https://map.kakao.com/link/search/${e.target.name} 공적판매처`)
 }
