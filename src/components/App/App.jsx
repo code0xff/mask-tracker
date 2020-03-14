@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Store} from 'components'
+import {Store, Empty} from 'components'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import {Button} from 'react-bootstrap'
 
@@ -68,7 +68,7 @@ class App extends Component {
       <div className="app">
         <Button onClick={this.search}>더 넓게 찾아보기 [{(distance / 1000).toFixed(1)}km]</Button>
         <div className="app-contents">
-          {stores.map((store, key) => {
+          {stores.length === 0 ? <Empty /> : stores.map((store, key) => {
             return (<Store key={key} store={store} />)
           })}
         </div>
