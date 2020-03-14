@@ -16,7 +16,7 @@ export default function Store({store}) {
           <Button variant={getStyleByLevel(store.remain_stat)} size="sm" name={store.name} onClick={linkToStoreInfo}>정보검색</Button>
         </Card.Body>
         <Card.Footer>
-          <Badge pill variant={getStyleByLevel(store.remain_stat)}>{store.distance}km</Badge>
+          <Badge pill variant={getStyleByLevel(store.remain_stat)}>{store.distance}km</Badge>&nbsp;
           <Badge pill variant={getStyleByLevel(store.remain_stat)}>
             {Level[store.remain_stat] ? Level[store.remain_stat].message : '정보없음'}
           </Badge>
