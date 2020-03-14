@@ -1,0 +1,2 @@
+.app{flex-direction:column}.app,.app-contents{width:100vw;height:100vh;padding:1rem;display:flex}.app-contents{flex-wrap:wrap;justify-content:center;overflow-y:scroll}::-webkit-scrollbar{width:.2rem}::-webkit-scrollbar-track{background:#f1f1f1}::-webkit-scrollbar-thumb{background:#888}::-webkit-scrollbar-thumb:hover{background:#555}.store{margin:1rem}
+/*# sourceMappingURL=main.6ede84e1.chunk.css.map */
