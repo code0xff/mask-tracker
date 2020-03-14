@@ -1,5 +1,7 @@
 import App from './App'
+import Store from './Store'
 
 export {
-  App
+  App,
+  Store
 }
