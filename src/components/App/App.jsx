@@ -1,10 +1,10 @@
 import React, {Component} from 'react'
-import {Store, Empty} from 'components'
+import {Store, Empty, StandBy} from 'components'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import {Button} from 'react-bootstrap'
 
 class App extends Component {
-  state={stores: [], storeIdList: [], distance: 500}
+  state={stores: [], storeIdList: [], distance: 500, onSearching: false}
 
   componentDidMount() {
     this.load()
@@ -19,6 +19,7 @@ class App extends Component {
   }
 
   load = () => {
+    this.setState({onSearching: true})
     navigator.geolocation.getCurrentPosition((pos) => {
       const latitude = pos.coords.latitude
       const longitude = pos.coords.longitude
@@ -40,7 +41,7 @@ class App extends Component {
           extendedStores.sort((store1, store2) => {
             return store1.remain_level <= store2.remain_level ? 1 : -1;  
           })
-          this.setState({stores: extendedStores})
+          this.setState({stores: extendedStores, onSearching: false})
         })
     })
   }
@@ -63,13 +64,15 @@ class App extends Component {
   }
 
   render() {
-    const {stores, distance} = this.state
+    const {stores, distance, onSearching} = this.state
     return (
       <div className="app">
         <Button onClick={this.search}>더 넓게 찾아보기 [{(distance / 1000).toFixed(1)}km]</Button>
         <div className="app-contents">
-          {stores.length === 0 ? <Empty /> : stores.map((store, key) => {
-            return (<Store key={key} store={store} />)
+          {onSearching ? <StandBy /> : 
+            stores.length === 0 ? <Empty /> : 
+            stores.map((store, key) => {
+              return (<Store key={key} store={store} />)
           })}
         </div>
       </div>
