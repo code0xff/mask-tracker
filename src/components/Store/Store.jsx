@@ -5,7 +5,7 @@ import Level from '../../const/Level'
 
 export default function Store({store}) {
   return (
-    <div className="store" style={isDisabled(store.remain_stat)}>
+    <div className="store">
       <Card style={{ width: '20rem' }} border={getStyleByLevel(store.remain_stat)}>
         <Card.Header>{store.name}</Card.Header>
         <Card.Body>
@@ -35,12 +35,4 @@ function getLinkInfo(store) {
 
 function linkToMap(e) {
   window.open(`https://map.kakao.com/link/map/${e.target.name}`)
-}
-
-function isDisabled(remainStat) {
-  if (remainStat === 'empty') {
-    return {'opacity': '0.6'}
-  } else if (!remainStat || remainStat === 'break') {
-    return {'opacity': '0.4'}
-  }
 }
