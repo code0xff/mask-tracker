@@ -27,23 +27,26 @@ class App extends Component {
 
       const {distance, stores, storeCodeList} = this.state
       const extendedStores = stores
-      const storeCodeListForCheck = storeCodeList
+    
       fetch(`https://8oi9s0nnth.apigw.ntruss.com/corona19-masks/v1/storesByGeo/json?lat=${latitude}&lng=${longitude}&m=${distance}`)
         .then(response => response.json())
         .then(jsonObject => {
           jsonObject.stores.forEach(element => {
-            const selectedStoreIndex = storeCodeListForCheck.indexOf(element.code)
+            const selectedStoreIndex = storeCodeList.indexOf(element.code)
             if (selectedStoreIndex === -1) {
               element.distance = (distance / 1000).toFixed(1)
               element.remain_level = element.remain_stat ? Level[element.remain_stat].level : 0
-              storeCodeListForCheck.push(element.code)
               extendedStores.push(element)
+            } else {
+              extendedStores[selectedStoreIndex].remain_stat = element.remain_stat
+              extendedStores[selectedStoreIndex].remain_level = element.remain_stat ? Level[element.remain_stat].level : 0
             }
           })
           extendedStores.sort((store1, store2) => {
             return store1.remain_level <= store2.remain_level ? 1 : -1;  
           })
-          this.setState({stores: extendedStores, onSearching: false})
+          const storeCodeListForCheck = extendedStores.map(store => store.code)
+          this.setState({stores: extendedStores, onSearching: false, storeCodeList: storeCodeListForCheck})
         })
     })
   }
@@ -52,10 +55,11 @@ class App extends Component {
     const {stores, distance, onSearching} = this.state
     return (
       <div className="app">
-        <Button onClick={this.search}>더 넓게 찾아보기 [{(distance / 1000).toFixed(1)}km]</Button>
+        <Button onClick={this.search} style={{'margin-bottom': '0.5rem'}}>더 넓게 찾아보기 [{(distance / 1000).toFixed(1)}km]</Button>
+        <Button variant="success" onClick={this.load}>새로고침</Button>
         <div className="app-contents">
           {onSearching ? 
-            <Info variant="success" message="공적마스크 판매 약국을 검색중입니다..."/> : 
+            <Info variant="primary" message="공적마스크 판매 약국을 검색중입니다..."/> : 
             stores.length === 0 ?
               <Info 
                 variant="warning" 
