@@ -1,11 +1,9 @@
 import App from './App'
 import Store from './Store'
-import Empty from './Empty'
-import StandBy from './StandBy'
+import Info from './Info'
 
 export {
   App,
   Store,
-  Empty,
-  StandBy
+  Info
 }

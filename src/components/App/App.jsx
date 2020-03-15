@@ -1,10 +1,11 @@
 import React, {Component} from 'react'
-import {Store, Empty, StandBy} from 'components'
+import {Store, Info} from 'components'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import {Button} from 'react-bootstrap'
+import Level from '../../const/Level'
 
 class App extends Component {
-  state={stores: [], storeIdList: [], distance: 500, onSearching: false}
+  state={stores: [], storeCodeList: [], distance: 500, onSearching: false}
 
   componentDidMount() {
     this.load()
@@ -24,16 +25,17 @@ class App extends Component {
       const latitude = pos.coords.latitude
       const longitude = pos.coords.longitude
 
-      const {distance, stores, storeIdList} = this.state
+      const {distance, stores, storeCodeList} = this.state
       const extendedStores = stores
-      const storeCodeListForCheck = storeIdList
+      const storeCodeListForCheck = storeCodeList
       fetch(`https://8oi9s0nnth.apigw.ntruss.com/corona19-masks/v1/storesByGeo/json?lat=${latitude}&lng=${longitude}&m=${distance}`)
         .then(response => response.json())
         .then(jsonObject => {
           jsonObject.stores.forEach(element => {
-            if (storeCodeListForCheck.indexOf(element.code) === -1) {
+            const selectedStoreIndex = storeCodeListForCheck.indexOf(element.code)
+            if (selectedStoreIndex === -1) {
               element.distance = (distance / 1000).toFixed(1)
-              element.remain_level = this.getRemainLevel(element.remain_stat)
+              element.remain_level = element.remain_stat ? Level[element.remain_stat].level : 0
               storeCodeListForCheck.push(element.code)
               extendedStores.push(element)
             }
@@ -46,34 +48,22 @@ class App extends Component {
     })
   }
 
-  getRemainLevel = (remainStat) => {
-    switch (remainStat) {
-      case 'plenty':
-        return 5
-      case 'some':
-        return 4
-      case 'few':
-        return 3
-      case 'empty':
-        return 2
-      case 'break':
-        return 1
-      default:
-        return 0
-    }
-  }
-
   render() {
     const {stores, distance, onSearching} = this.state
     return (
       <div className="app">
         <Button onClick={this.search}>더 넓게 찾아보기 [{(distance / 1000).toFixed(1)}km]</Button>
         <div className="app-contents">
-          {onSearching ? <StandBy /> : 
-            stores.length === 0 ? <Empty /> : 
-            stores.map((store, key) => {
-              return (<Store key={key} store={store} />)
-          })}
+          {onSearching ? 
+            <Info variant="success" message="공적마스크 판매 약국을 검색중입니다..."/> : 
+            stores.length === 0 ?
+              <Info 
+                variant="warning" 
+                message="더 넓게 찾아보기로 추가 검색해보세요..."
+              /> : 
+              stores.map((store, key) => {
+                return (<Store key={key} store={store} />)})
+          }
         </div>
       </div>
     )
