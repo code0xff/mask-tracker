@@ -55,7 +55,7 @@ class App extends Component {
     const {stores, distance, onSearching} = this.state
     return (
       <div className="app">
-        <Button onClick={this.search} style={{'margin-bottom': '0.5rem'}}>더 넓게 찾아보기 [{(distance / 1000).toFixed(1)}km]</Button>
+        <Button onClick={this.search} style={{'marginBottom': '0.5rem'}}>더 넓게 찾아보기 [{(distance / 1000).toFixed(1)}km]</Button>
         <Button variant="success" onClick={this.load}>새로고침</Button>
         <div className="app-contents">
           {onSearching ? 
