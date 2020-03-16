@@ -1,62 +1,79 @@
 import React, {Component} from 'react'
 import {Store, Info} from 'components'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import {Button} from 'react-bootstrap'
+import {Button, Form} from 'react-bootstrap'
 import Level from '../../const/Level'
 
 class App extends Component {
-  state={stores: [], storeCodeList: [], distance: 500, onSearching: false}
+  state={stores: [], boundary: 500, onSearching: false}
 
   componentDidMount() {
     this.load()
   }
   
-  search = () => {
-    const {distance} = this.state
-    if (distance + 500 <= 5000) {
-      this.setState({distance: distance + 500})
-    }
-    this.load()
-  }
-
   load = () => {
     this.setState({onSearching: true})
     navigator.geolocation.getCurrentPosition((pos) => {
-      const latitude = pos.coords.latitude
-      const longitude = pos.coords.longitude
+      const lat = pos.coords.latitude
+      const lng = pos.coords.longitude
 
-      const {distance, stores, storeCodeList} = this.state
-      const extendedStores = stores
-    
-      fetch(`https://8oi9s0nnth.apigw.ntruss.com/corona19-masks/v1/storesByGeo/json?lat=${latitude}&lng=${longitude}&m=${distance}`)
+      const {boundary} = this.state
+      const stores = []
+      fetch(`https://8oi9s0nnth.apigw.ntruss.com/corona19-masks/v1/storesByGeo/json?lat=${lat}&lng=${lng}&m=${boundary}`)
         .then(response => response.json())
         .then(jsonObject => {
           jsonObject.stores.forEach(element => {
-            const selectedStoreIndex = storeCodeList.indexOf(element.code)
-            if (selectedStoreIndex === -1) {
-              element.distance = (distance / 1000).toFixed(1)
-              element.remain_level = element.remain_stat ? Level[element.remain_stat].level : 0
-              extendedStores.push(element)
-            } else {
-              extendedStores[selectedStoreIndex].remain_stat = element.remain_stat
-              extendedStores[selectedStoreIndex].remain_level = element.remain_stat ? Level[element.remain_stat].level : 0
+            element.distance = this.computeDistance(lat, lng, element.lat, element.lng).toFixed(2)
+            element.remain_level = element.remain_stat ? Level[element.remain_stat].level : 0
+            stores.push(element)
+          })
+          stores.sort((store1, store2) => {
+            if (store1.remain_level === store2.remain_level) {
+              return store1.distance >= store2.distance ? 1 : -1;  
             }
+            return store1.remain_level < store2.remain_level ? 1 : -1;  
           })
-          extendedStores.sort((store1, store2) => {
-            return store1.remain_level <= store2.remain_level ? 1 : -1;  
-          })
-          const storeCodeListForCheck = extendedStores.map(store => store.code)
-          this.setState({stores: extendedStores, onSearching: false, storeCodeList: storeCodeListForCheck})
+          this.setState({stores, onSearching: false})
         })
     })
   }
 
+  computeDistance = (lat1, lng1, lat2, lng2) => {
+    const startLatRads = this.degreesToRadians(lat1)
+    const startLongRads = this.degreesToRadians(lng1)
+    const destLatRads = this.degreesToRadians(lat2)
+    const destLongRads = this.degreesToRadians(lng2)
+
+    const Radius = 6371
+    return Math.acos(Math.sin(startLatRads) * Math.sin(destLatRads) +
+     Math.cos(startLatRads) * Math.cos(destLatRads) * Math.cos(startLongRads - destLongRads)) 
+     * Radius
+  }
+
+  degreesToRadians = (degrees) => {
+    return (degrees * Math.PI) / 180
+  }
+
+  setBoundary = (e) => {
+    this.setState({boundary: e.target.value})
+  }
+
   render() {
-    const {stores, distance, onSearching} = this.state
+    const {stores, onSearching} = this.state
     return (
       <div className="app">
-        <Button onClick={this.search} style={{'marginBottom': '0.5rem'}}>더 넓게 찾아보기 [{(distance / 1000).toFixed(1)}km]</Button>
-        <Button variant="success" onClick={this.load}>새로고침</Button>
+        <Form.Group controlId="boundary-size-form">
+          <Form.Control as="select" custom="true" onChange={this.setBoundary}>
+            <option value="500">0.5km</option>
+            <option value="1000">1km</option>
+            <option value="2000">2km</option>
+            <option value="3000">3km</option>
+            <option value="4000">4km</option>
+            <option value="5000">5km</option>
+          </Form.Control>
+        </Form.Group>
+        <Button variant="success" onClick={this.load}>탐색하기</Button>
+  
         <div className="app-contents">
           {onSearching ? 
             <Info variant="primary" message="공적마스크 판매 약국을 검색중입니다..."/> : 
