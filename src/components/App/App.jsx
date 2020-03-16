@@ -80,7 +80,7 @@ class App extends Component {
             stores.length === 0 ?
               <Info 
                 variant="warning" 
-                message="더 넓게 찾아보기로 추가 검색해보세요..."
+                message="요청하신 범위 안에 공적마스크 판매 약국이 없습니다..."
               /> : 
               stores.map((store, key) => {
                 return (<Store key={key} store={store} />)})
