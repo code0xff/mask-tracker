@@ -16,7 +16,7 @@ class App extends Component {
     navigator.geolocation.getCurrentPosition((pos) => {
       const lat = pos.coords.latitude
       const lng = pos.coords.longitude
-
+      
       const {boundary} = this.state
       const stores = []
       fetch(`https://8oi9s0nnth.apigw.ntruss.com/corona19-masks/v1/storesByGeo/json?lat=${lat}&lng=${lng}&m=${boundary}`)
@@ -54,8 +54,9 @@ class App extends Component {
     return (degrees * Math.PI) / 180
   }
 
-  setBoundary = (e) => {
+  selectChangeHandler = (e) => {
     this.setState({boundary: e.target.value})
+    this.load()
   }
 
   render() {
@@ -63,7 +64,7 @@ class App extends Component {
     return (
       <div className="app">
         <Form.Group controlId="boundary-size-form">
-          <Form.Control as="select" custom="true" onChange={this.setBoundary}>
+          <Form.Control as="select" custom="true" onChange={this.selectChangeHandler}>
             <option value="500">0.5km</option>
             <option value="1000">1km</option>
             <option value="2000">2km</option>
@@ -72,7 +73,7 @@ class App extends Component {
             <option value="5000">5km</option>
           </Form.Control>
         </Form.Group>
-        <Button variant="success" onClick={this.load}>탐색하기</Button>
+        <Button variant="success" onClick={this.load}>새로고침</Button>
   
         <div className="app-contents">
           {onSearching ? 
